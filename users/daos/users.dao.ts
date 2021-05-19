@@ -1,14 +1,13 @@
-import shortid from 'shortid';
 import debug from 'debug';
 import { CreateUserDto } from '../dto/create.user.dto';
 import { PatchUserDto } from '../dto/patch.user.dto';
 import { PutUserDto } from '../dto/put.user.dto';
 import UserModel from '../../model/user';
 import constants from '../../constants/constants';
+import argon2 from 'argon2';
 const log: debug.IDebugger = debug('app:in-memory-dao');
 
 class UsersDao {
-    users: Array<CreateUserDto> = [];
 
     async addUser( user: CreateUserDto )
     {
@@ -24,6 +23,50 @@ class UsersDao {
             errorMsg: constants.users.error.createUser,
             status: constants.status.internalServerError
         };
+    }
+
+    async resetPassword(id :number, password:string)
+    {
+        const userFound = await UserModel.findOne(
+            {
+                where:
+                {
+                    id
+                }
+            }
+        );
+        if(userFound)
+        {
+            const hashedPassword = await argon2.hash( password );
+
+            const updateUser = await UserModel.update(
+                {
+                    password:hashedPassword
+                }
+                ,
+                {
+                    where:
+                    {
+                        id
+                    }
+                }
+            );
+            if(updateUser)
+            {
+                return {
+                    msg:constants.users.success.passwordUpdated,
+                    status:constants.status.ok
+                };
+            }
+        }
+        else if(!userFound)
+        {
+            return {
+                errorMsg:constants.users.error.passwordUpdated,
+                status:constants.status.ok
+            };
+        }
+        
     }
 
     async getUsers()
@@ -67,11 +110,7 @@ class UsersDao {
 
     async putUserById( userId: number, user: PutUserDto )
     {
-        const objIndex = this.users.findIndex(
-            (obj: { id: number}) => obj.id === userId
-        );
-        this.users.splice(objIndex, 1, user);
-        return `${user.id} updated via put`;
+        
     }
 
     async patchUserById( userId: number, user: PatchUserDto )
@@ -111,9 +150,9 @@ class UsersDao {
 
     async removeUserById( userId: number ) 
     {
-       const userDeleted = await  UserModel.destroy({
+        const userDeleted = await UserModel.destroy( {
             where: { id: userId }
-       } )
+        } );
         if ( userDeleted )
         {
             return {

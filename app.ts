@@ -10,17 +10,12 @@ import { UsersRoutes } from './users/users.routes.config';
 import { BooksRoutes } from './books/books.routes.config';
 import debug from 'debug';
 import sequelize from './helpers/database';
-
-
+import constants from './constants/constants';
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
-const port = 3000;
 const routes: Array<CommonRoutesConfig> = [];
 const debugLog: debug.IDebugger = debug('app');
-
-
-
 
 app.use(express.json());
 app.use(cors());
@@ -39,22 +34,10 @@ app.use(expressWinston.logger(loggerOptions));
 routes.push( new UsersRoutes( app ) );
 routes.push( new BooksRoutes( app ) );
 
-const runningMessage = `Server running at http://localhost:${port}`;
-app.get('/', (req: express.Request, res: express.Response) => {
-    res.status(200).send(runningMessage)
-} );
-
-sequelize.sync().then( (res)   => 
-{
-}).catch(err =>
-{
-    console.log( err );
-    
-} );
-        
-server.listen(port, () => {
+sequelize.sync();
+server.listen(process.env.PORT, () => {
     routes.forEach((route: CommonRoutesConfig) => {
-        debugLog(`Routes configured for ${route.getName()}`);
+        debugLog(constants.others.debugLog + route.getName());
     });
-    console.log(runningMessage);
+    console.log(constants.others.runningMessage + process.env.PORT);
 });

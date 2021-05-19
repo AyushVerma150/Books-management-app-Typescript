@@ -2,8 +2,8 @@ import express from 'express';
 import BooksService from '../services/books.service';
 import debug from 'debug';
 import ResponseHandler from '../../helpers/response';
-
 const log: debug.IDebugger = debug( 'app:books-controller' );
+
 class BooksController
 {
     async listBooks( req: express.Request, res: express.Response )
@@ -43,5 +43,16 @@ class BooksController
         }
         return ResponseHandler.sendMessage( res, updatedBooks );
     }
+
+    async removeBook( req: express.Request, res: express.Response )
+    {
+        const bookDeleted= await BooksService.deleteById( req.body.id);
+        if ( bookDeleted.errorMsg)
+        {
+            return ResponseHandler.sendError( res,bookDeleted );
+        }
+        return ResponseHandler.sendMessage( res, bookDeleted );
+    }
+    
 }
 export default new BooksController();

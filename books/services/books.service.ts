@@ -15,9 +15,9 @@ class BooksService implements CRUD
         return BooksDao.addBook( resource  ,userId );
     }
 
-    async deleteById( id: number )
+    async deleteById( id: number ):Promise<any>
     {
-        return "";
+        return BooksDao.removeBook(id);
     }
 
     async list( limit: number, page: number )

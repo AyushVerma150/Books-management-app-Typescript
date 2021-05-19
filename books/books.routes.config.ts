@@ -25,6 +25,9 @@ export class BooksRoutes extends CommonRoutesConfig
         this.app
             .route( `/editBook` )
             .post( BooksController.editBookDetails );
+        this.app
+            .route( `/removeBook` )
+            .post( BooksController.removeBook );
         
         return this.app;
 

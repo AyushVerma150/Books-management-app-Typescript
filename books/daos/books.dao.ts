@@ -42,6 +42,42 @@ class BooksDao
             status: constants.status.internalServerError
         };
     }
+
+
+    async removeBook(id:number)
+    {
+        const bookFound = await BookModel.findOne(
+            {
+                where:
+                {
+                    id
+                }
+            }
+        );
+        if ( bookFound )
+        {
+            const bookDeleted= await  BookModel.destroy
+                (
+                    {
+                        where: {
+                            id
+                        }
+                    }
+            );
+            if ( bookDeleted )
+            {
+                return {
+                    msg: constants.books.success.bookDeletion,
+                    status: constants.status.ok
+                }
+            }
+        }
+        return {
+            errorMsg: constants.books.error.bookDeletion,
+            status: constants.status.internalServerError
+        };
+    }
+
        
     async fetchAuthorBook(id:number)
     {

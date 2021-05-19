@@ -5,7 +5,8 @@ const constants =
         success:
         {
             userUpdated: "User details are updated",
-            removeUser:"Remove User Success"
+            removeUser:"Remove User Success",
+            passwordUpdated:"Password updated Successfully"
         },
         error:
         {
@@ -14,7 +15,8 @@ const constants =
             userUpdated: "User details could not be updated",
             validCredentials: "Authentication failed , check E-mail or Password",
             removeUser: "Cannot Delete User",
-            passwordMismatch:"Passwords do not match"
+            passwordMismatch: "Passwords do not match",
+            passwordUpdated:"Password update failed"
         }
     },
     books:
@@ -23,7 +25,8 @@ const constants =
         {
             bookAdded: "Book Added Successfully",
             booksFetched: "Books Fetched Successfully",
-            BookUpdate:"Book Update Success"
+            BookUpdate: "Book Update Success",
+            bookDeletion:"Book Deleted SuccessFully"
 
         },
         error:
@@ -31,7 +34,8 @@ const constants =
             bookAdded: "Book Addition Failed",
             booksFetched: "Could not fetch books",
             booksFound: "No books Found",
-            BookUpdate:"Could not update Book details"
+            BookUpdate: "Could not update Book details",
+            bookDeletion:"Book deletion Failed"
             
         }
     },
@@ -41,6 +45,11 @@ const constants =
         internalServerError: 500,
         unprocessableEntity: 400,
         notFound: 404,
+    },
+    others:
+    {
+        runningMessage: "The app server is running on ",
+        debugLog:"The debug log has started "
     }
 }
 

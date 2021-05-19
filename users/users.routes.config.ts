@@ -38,9 +38,9 @@ export class UsersRoutes extends CommonRoutesConfig {
             .get(UsersController.getUserById)
             .delete(UsersController.removeUser);
 
-        this.app.put(`/users/:userId`, [
+        this.app.post(`/users/resetPassword`, [
             UsersMiddleware.validateRequiredUserBodyFields,
-            UsersMiddleware.validateSameEmailBelongToSameUser,
+            UsersMiddleware.validateUserCredentials,
             UsersController.put,
         ]);
 
